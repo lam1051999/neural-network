@@ -11,7 +11,7 @@ import mean_normalization
 
 HIDDEN_LAYER_NODES = 5
 OUTPUT_LAYER_NODES = 1
-NUM_ITERATIONS = 1000
+NUM_ITERATIONS = 100000
 COST_THRESHOLD = math.pow(10, -3)
 INITIAL_EPSILON = 0.05
 LEARNING_RATE = 0.05
@@ -73,3 +73,22 @@ np.savetxt("Theta2.csv", Theta2, delimiter=",")
 #     plt.xlabel("Number of iterations")
 #     plt.ylabel(f"Cost function for learning rate = {LEARNING_RATES[i]}")
 #     plt.show()
+
+# calculate the accuracy of training set
+Theta1_final = np.genfromtxt("Theta1.csv", delimiter=",")
+Theta2_final = np.genfromtxt("Theta2.csv", delimiter=",")
+
+theta2_final = np.array([Theta2_final])
+
+J_final, h_final, new_a2_sets_final, z2_final = cost_function.cost_function(
+    new_training_sets, Theta1_final, theta2_final, number_features_sets, y_training_sets)
+
+result = h_final.T
+result[result >= 0.5] = 1
+result[result < 0.5] = 0
+print(result)
+compare = result == y_training_sets
+num_right_predictions = compare[compare == True].size
+accuracy = (num_right_predictions/y_training_sets.size)*100
+
+print("Training sets accuracy: %.2f" % accuracy + "%")
